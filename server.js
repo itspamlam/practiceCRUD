@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const Schema = mongoose.Schema;
 
 const toDoController = require('./ToDoController');
 
@@ -12,7 +11,7 @@ mongoose.connection.once('open', () => {
 });
 
 //using both to cover both GET and POST requests
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/www'));
@@ -23,10 +22,11 @@ toDoRouter.post('/create', toDoController.createToDo);
 
 toDoRouter.get('/get', toDoController.getToDos);
 
-toDoRouter.delete('/:id', toDoController.deleteToDo);
+toDoRouter.patch('/:id', toDoController.updateToDo);
+
+toDoRouter.delete('/delete/:id', toDoController.deleteToDo);
 
 app.use('/todo', toDoRouter);
-{}
 
 const server = app.listen(3000, () => {
   console.log('listening at http://localhost:3000');
