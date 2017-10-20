@@ -3,7 +3,6 @@ const ToDo = require('./ToDoModel');
 const ToDoController = {
 
   createToDo(req, res) {
-    console.log(req);
     ToDo.create(req.body)
       .then(doc => res.status(200).send(doc))
       .catch(() => res.status(500).send());
@@ -20,12 +19,12 @@ const ToDoController = {
   },
 
   updateToDo(req, res) {
-    ToDo.findOneAndUpdate({ _id: req.params._id })
+    ToDo.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
       .then((updatedDoc) => {
         if (!updatedDoc) res.status(500).send('Not found');
         res.status(200).send(updatedDoc);
       })
-      .catch((err) => res. status(500).send());
+      .catch((err) => res. status(418).send());
   },
 
   deleteToDo(req, res) {

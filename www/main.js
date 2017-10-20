@@ -18,25 +18,28 @@ $(document).ready(function () {
     //PARSE the AJAX response
     function onSuccess(data) {
       //Build the HTML for the messsage list
-      console.log(data);
       $('#listContainer').empty();
       for (let i = 0; i < data.length; i += 1) {
-        console.log('in here');
         let html = '<input id="' + data[i]._id + '" value="' + data[i].todo + '"></input><button id="' + i + '">X</button><br>';
         $('#listContainer').append(html);
+        $('#' + data[i]._id).keypress(function(e) {
+          if (e.which === 13) {
+            let id = data[i]._id;
+           updateToDo(id);
+          }
+        });
         $('#' + i).click({ id: data[i]._id }, deleteToDo);
+
       }
     }
   }
   
   getToDoList();
 
-
   function createToDo() {
-    console.log('create called');
     let result = $('#input').val();
     let data = { todo: result };
-    console.log(data);
+    $('#input').val('');
 
     $.ajax({
       type: 'POST',
@@ -46,6 +49,20 @@ $(document).ready(function () {
       dataType: 'json',
     });
   }
+
+  function updateToDo(id) {
+    let result = $('#' + id).val();
+    let data = { todo: result };
+
+    $.ajax({
+      type: 'POST',
+      url: 'todo/update/' + id,
+      data: data,
+      success: getToDoList,
+      dataType: 'json',
+    });
+  }
+
   
   function deleteToDo (data) {
     let id = data.data.id;

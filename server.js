@@ -22,7 +22,7 @@ toDoRouter.post('/create', toDoController.createToDo);
 
 toDoRouter.get('/get', toDoController.getToDos);
 
-toDoRouter.patch('/:id', toDoController.updateToDo);
+toDoRouter.post('/update/:id', toDoController.updateToDo);
 
 toDoRouter.delete('/delete/:id', toDoController.deleteToDo);
 
