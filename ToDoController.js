@@ -5,7 +5,7 @@ const ToDoController = {
   createToDo(req, res) {
     ToDo.create(req.body)
       .then(doc => res.status(200).send(doc))
-      .catch(() => res.status(500).send());
+      .catch((err) => res.status(500).send(err));
   },
 
   getToDos(req, res) {
