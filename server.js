@@ -3,6 +3,12 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config.js');
+
+const compiler = webpack(webpackConfig);
+
 const toDoController = require('./ToDoController');
 
 mongoose.connect('mongodb://pamlam:ilovetesting@ds057476.mlab.com:57476/crud');
@@ -16,7 +22,21 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/www'));
 
+app.use(webpackDevMiddleware(compiler, {
+  hot: true,
+  filename: 'bundle.js',
+  publicPath: '/',
+  stats: {
+    colors: true,
+  },
+  historyApiFallback: true,
+}));
+
 const toDoRouter = express.Router();
+
+//app.post('/login', userController.getUser, function (req, res) {
+  // return res.redirect('/todo.html');
+// })
 
 toDoRouter.post('/create', toDoController.createToDo);
 
